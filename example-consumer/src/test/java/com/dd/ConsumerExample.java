@@ -11,7 +11,7 @@ public class ConsumerExample {
         String name = rpc.getName();
         String version = rpc.getVersion();
         String serverHost = rpc.getServerHost();
-        Integer serverPost = rpc.getServerPost();
+        Integer serverPost = rpc.getServerPort();
         System.out.println(name);
         System.out.println(version);
         System.out.println(serverHost);

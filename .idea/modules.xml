@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/dd-rpc.iml" filepath="$PROJECT_DIR$/.idea/dd-rpc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dd-rpc-core/dd-rpc-core.iml" filepath="$PROJECT_DIR$/dd-rpc-core/dd-rpc-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/example-common.iml" filepath="$PROJECT_DIR$/example-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/example-consumer.iml" filepath="$PROJECT_DIR$/example-consumer.iml" />
       <module fileurl="file://$PROJECT_DIR$/example-provider.iml" filepath="$PROJECT_DIR$/example-provider.iml" />

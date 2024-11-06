@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="dd-rpc-easy" />
         <module name="dd-rpc-core" />
         <module name="example-provider" />
         <module name="example-common" />

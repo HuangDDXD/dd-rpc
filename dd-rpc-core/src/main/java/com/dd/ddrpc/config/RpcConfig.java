@@ -1,5 +1,6 @@
 package com.dd.ddrpc.config;
 
+import com.dd.ddrpc.serializer.SerializerKeys;
 import lombok.Data;
 
 /**
@@ -15,6 +16,8 @@ public class RpcConfig {
     private String serverHost = "localhost";
 
     private Integer serverPort = 8080;
+
+    private String serializer = SerializerKeys.JDK;
 
     private boolean mock = false;
 }

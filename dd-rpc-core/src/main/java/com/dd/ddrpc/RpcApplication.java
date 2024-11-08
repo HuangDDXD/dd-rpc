@@ -1,7 +1,10 @@
 package com.dd.ddrpc;
 
+import com.dd.ddrpc.config.RegistryConfig;
 import com.dd.ddrpc.config.RpcConfig;
 import com.dd.ddrpc.constant.RpcConstant;
+import com.dd.ddrpc.registry.Registry;
+import com.dd.ddrpc.registry.RegistryFactory;
 import com.dd.ddrpc.utils.ConfigUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +24,12 @@ public class RpcApplication {
     public static void init(RpcConfig newRpcConfig) {
         rpcConfig = newRpcConfig;
         log.info("rpc init, config = {}", newRpcConfig.toString());
+
+        // 注册中心初始化
+        RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
+        Registry registry = RegistryFactory.getInstance(registryConfig.getRegistry());
+        registry.init(registryConfig);
+        log.info("registry init, config = {}", registryConfig);
     }
 
     /**

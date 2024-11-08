@@ -14,9 +14,16 @@ public class EasyConsumerExample {
         // 动态代理
         UserService userService = ServiceProxyFactory.getProxy(UserService.class);
         User user = new User();
-        user.setName("dd");
+        user.setName("DD");
         // 调用
         User newUser = userService.getUser(user);
+        if (newUser != null) {
+            System.out.println(newUser.getName());
+        } else {
+            System.out.println("user == null");
+        }
+        // 调用
+        newUser = userService.getUser(user);
         if (newUser != null) {
             System.out.println(newUser.getName());
         } else {

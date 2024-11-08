@@ -1,4 +1,4 @@
-package com.dd.ddrpc.proxy;
+package com.dd.ddrpc.registry;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.http.HttpRequest;
@@ -9,8 +9,6 @@ import com.dd.ddrpc.constant.RpcConstant;
 import com.dd.ddrpc.model.RpcRequest;
 import com.dd.ddrpc.model.RpcResponse;
 import com.dd.ddrpc.model.ServiceMetaInfo;
-import com.dd.ddrpc.registry.Registry;
-import com.dd.ddrpc.registry.RegistryFactory;
 import com.dd.ddrpc.serializer.Serializer;
 import com.dd.ddrpc.serializer.SerializerFactory;
 
@@ -21,6 +19,7 @@ import java.util.List;
 
 /**
  * 服务代理（JDK 动态代理）
+ *
  */
 public class ServiceProxy implements InvocationHandler {
 
@@ -33,7 +32,7 @@ public class ServiceProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         // 指定序列化器
-        Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
+        final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
 
         // 构造请求
         String serviceName = method.getDeclaringClass().getName();
@@ -45,8 +44,8 @@ public class ServiceProxy implements InvocationHandler {
                 .build();
         try {
             // 序列化
-            byte[] bytes = serializer.serialize(rpcRequest);
-            // 发送请求
+            byte[] bodyBytes = serializer.serialize(rpcRequest);
+            
             // 从注册中心获取服务提供者请求地址
             RpcConfig rpcConfig = RpcApplication.getRpcConfig();
             Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
@@ -57,12 +56,12 @@ public class ServiceProxy implements InvocationHandler {
             if (CollUtil.isEmpty(serviceMetaInfoList)) {
                 throw new RuntimeException("暂无服务地址");
             }
-            // 暂时先去第一个
-            ServiceMetaInfo selectServiceMetaInfo = serviceMetaInfoList.get(0);
+            ServiceMetaInfo selectedServiceMetaInfo = serviceMetaInfoList.get(0);
+            
             // 发送请求
-            try (HttpResponse httpResponse = HttpRequest.post(selectServiceMetaInfo.getServiceAddress())
-                         .body(bytes)
-                         .execute()) {
+            try (HttpResponse httpResponse = HttpRequest.post(selectedServiceMetaInfo.getServiceAddress())
+                    .body(bodyBytes)
+                    .execute()) {
                 byte[] result = httpResponse.bodyBytes();
                 // 反序列化
                 RpcResponse rpcResponse = serializer.deserialize(result, RpcResponse.class);
@@ -71,6 +70,7 @@ public class ServiceProxy implements InvocationHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 }

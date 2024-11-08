@@ -20,4 +20,9 @@ public class RpcConfig {
     private String serializer = SerializerKeys.JDK;
 
     private boolean mock = false;
+
+    /**
+     * 注册中心配置
+     */
+    private RegistryConfig registryConfig = new RegistryConfig();
 }

@@ -1,6 +1,5 @@
 package com.dd.example.provider;
 
-import cn.hutool.core.net.NetUtil;
 import com.dd.ddrpc.RpcApplication;
 import com.dd.ddrpc.config.RegistryConfig;
 import com.dd.ddrpc.config.RpcConfig;
@@ -8,8 +7,7 @@ import com.dd.ddrpc.model.ServiceMetaInfo;
 import com.dd.ddrpc.registry.LocalRegistry;
 import com.dd.ddrpc.registry.Registry;
 import com.dd.ddrpc.registry.RegistryFactory;
-import com.dd.ddrpc.server.HttpServer;
-import com.dd.ddrpc.server.VertxHttpServer;
+import com.dd.ddrpc.server.tcp.VertxTcpServer;
 import com.dd.example.common.service.UserService;
 
 /**
@@ -28,7 +26,8 @@ public class ProviderExample {
 
         // 注册服务到注册中心
         RpcConfig rpcConfig = RpcApplication.getRpcConfig();
-        Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
+        RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
+        Registry registry = RegistryFactory.getInstance(registryConfig.getRegistry());
         ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
         serviceMetaInfo.setServiceName(serviceName);
         serviceMetaInfo.setServiceHost(rpcConfig.getServerHost());
@@ -39,8 +38,8 @@ public class ProviderExample {
             throw new RuntimeException(e);
         }
 
-        // 启动 web 服务
-        HttpServer httpServer = new VertxHttpServer();
-        httpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
+        // 启动 TCP 服务
+        VertxTcpServer vertxTcpServer = new VertxTcpServer();
+        vertxTcpServer.doStart(8080);
     }
 }

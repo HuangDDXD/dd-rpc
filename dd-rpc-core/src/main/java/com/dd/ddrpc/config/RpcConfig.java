@@ -1,5 +1,6 @@
 package com.dd.ddrpc.config;
 
+import com.dd.ddrpc.fault.retry.RetryStrategyKeys;
 import com.dd.ddrpc.loadbalancer.LoadBalancerKeys;
 import com.dd.ddrpc.serializer.SerializerKeys;
 import lombok.Data;
@@ -28,4 +29,6 @@ public class RpcConfig {
     private RegistryConfig registryConfig = new RegistryConfig();
 
     private String loadBalancer = LoadBalancerKeys.ROUND_ROBIN;
+
+    private String retryStrategy = RetryStrategyKeys.NO;
 }

@@ -4,7 +4,9 @@ import com.dd.ddrpc.server.HttpServer;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.net.NetServer;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class VertxTcpServer implements HttpServer {
 
     private byte[] handleRequest(byte[] requestData) {
@@ -20,17 +22,7 @@ public class VertxTcpServer implements HttpServer {
         NetServer server = vertx.createNetServer();
 
         // 处理请求
-        server.connectHandler(socket -> {
-            // 处理连接
-            socket.handler(buffer -> {
-                // 处理接收到的字节数据
-                byte[] requestData = buffer.getBytes();
-                // 在这里进行自定义的字节数组处理逻辑，比如解析请求，调用服务，构造相应等
-                byte[] responseData = handleRequest(requestData);
-                // 发送请求
-                socket.write(Buffer.buffer(responseData));
-            });
-        });
+        server.connectHandler(new TcpServerHandler());
 
         server.listen(port, result -> {
             if (result.succeeded()) {

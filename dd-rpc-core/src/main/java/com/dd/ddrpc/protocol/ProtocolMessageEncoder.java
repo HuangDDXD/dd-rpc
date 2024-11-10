@@ -19,7 +19,6 @@ public class ProtocolMessageEncoder {
         if (protocolMessage == null || protocolMessage.getHeader() == null) {
             return Buffer.buffer();
         }
-
         ProtocolMessage.Header header = protocolMessage.getHeader();
         // 依次向缓冲区写入字节
         Buffer buffer = Buffer.buffer();
@@ -34,13 +33,11 @@ public class ProtocolMessageEncoder {
         if (serializerEnum == null) {
             throw new RuntimeException("序列化协议不存在");
         }
-
         Serializer serializer = SerializerFactory.getInstance(serializerEnum.getValue());
-        byte[] bytes = serializer.serialize(protocolMessage.getBody());
-
-        buffer.getInt(bytes.length);
-        buffer.appendBytes(bytes);
+        byte[] bodyBytes = serializer.serialize(protocolMessage.getBody());
         // 写入 body 长度和数据
+        buffer.appendInt(bodyBytes.length);
+        buffer.appendBytes(bodyBytes);
         return buffer;
     }
 }
